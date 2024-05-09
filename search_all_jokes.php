@@ -15,7 +15,7 @@
 <?php
 include "db_connect.php";
 
-$sql = "SELECT JokeID, Joke_question, Joke_answer, user_id FROM jokes_table";
+$sql = "SELECT JokeID, Joke_question, Joke_answer, users.user_id, users.user_name, users.google_name FROM jokes_table JOIN users on jokes_table.user_id=users.user_id";
 $result = $mysqli->query($sql);
 
 if ($result->num_rows > 0) {
@@ -23,7 +23,7 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         echo "<h3>" . $row['Joke_question'] . "</h3>";
 
-        echo "<div><p>" . $row["Joke_answer"] . " submitted by user #" . $row['user_id'] . "</p></div>";
+        echo "<div><p>" . $row["Joke_answer"] . " submitted by user " .$row['user_name'].$row['google_name'] . "</p></div>";
     }
 } else {
     echo "0 results";

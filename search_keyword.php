@@ -23,7 +23,8 @@ echo $keywordfromform;
 echo "<h2>Show all jokes with the word " . $keywordfromform . "</h2>";
 $keywordfromform = "%" . $keywordfromform . "%";
 
-$sql = "SELECT JokeID, Joke_question, Joke_answer, users.user_id, user_name FROM jokes_table JOIN users ON users.user_id = jokes_table.user_id WHERE Joke_question LIKE '$keywordfromform'";
+$sql = "SELECT JokeID, Joke_question, Joke_answer, users.user_id, user_name, google_name FROM jokes_table 
+JOIN users ON users.user_id = jokes_table.user_id WHERE Joke_question LIKE '$keywordfromform'";
 $result = $mysqli->query($sql);
 
 echo "SQL Statement = ".$sql."<br>";
@@ -45,12 +46,11 @@ echo "SQL Statement = ".$sql."<br>";
 //   echo "0 results";
 // }
 
-$sql = "SELECT JokeID, Joke_question, Joke_answer, users.user_id, user_name FROM jokes_table JOIN users ON users.user_id = jokes_table.user_id WHERE Joke_question LIKE ?";
 $stmt = $mysqli->prepare($sql);
 $stmt->bind_param('s', $keywordfromform);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($JokeID, $Joke_question, $Joke_answer, $userid, $username);
+$stmt->bind_result($JokeID, $Joke_question, $Joke_answer, $userid, $username,$google_name);
 
 
 if ($stmt->num_rows > 0) {
@@ -63,7 +63,7 @@ if ($stmt->num_rows > 0) {
 
         echo "<h3>" . $safe_joke_question . "</h3>";
         
-        echo "<div><p>" . $safe_joke_answer  . " -- Submitted by user " . $username ."</p></div>";
+        echo "<div><p>" . $safe_joke_answer  . " -- Submitted by user " . $username . $google_name . "</p></div>";
     }
 
     echo "</div>";
